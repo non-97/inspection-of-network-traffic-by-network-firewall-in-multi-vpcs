@@ -7,7 +7,6 @@ import {
   aws_networkfirewall as networkfirewall,
   aws_logs as logs,
 } from "aws-cdk-lib";
-import { Subnet } from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 
 export class NetworkFirewallStack extends Stack {
