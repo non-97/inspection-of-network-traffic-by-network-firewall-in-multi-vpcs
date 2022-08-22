@@ -646,7 +646,7 @@ export class NetworkFirewallStack extends Stack {
     spokeVpcA
       .selectSubnets({ subnetGroupName: "Workload" })
       .subnets.map((subnet, index) => {
-        new ec2.Instance(this, `Spoke VPC A EC 2Instance ${index}`, {
+        new ec2.Instance(this, `Spoke VPC A EC2 Instance ${index}`, {
           machineImage: ec2.MachineImage.latestAmazonLinux({
             generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
           }),
