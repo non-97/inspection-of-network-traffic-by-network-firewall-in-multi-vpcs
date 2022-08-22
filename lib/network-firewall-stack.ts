@@ -15,8 +15,8 @@ export class NetworkFirewallStack extends Stack {
 
     // Get the string after the stack name in the stack id to append to the end of the Log Group name to make it unique
     const stackUniqueId = Fn.select(2, Fn.split("/", this.stackId));
-    // CloudWatch Logs for VPC Flow Logs
 
+    // CloudWatch Logs for VPC Flow Logs
     const vpcFlowLogsLogGroup = new logs.LogGroup(
       this,
       "VPC Flow Logs Log Group",
@@ -216,26 +216,30 @@ export class NetworkFirewallStack extends Stack {
     });
 
     // Transit Gateway attachment for Inspection VPC
-    const tgwAttachmentForInspectionVpc = new ec2.CfnTransitGatewayAttachment(
-      this,
-      "TGW attachment for Inspection VPC",
-      {
-        subnetIds: inspectionVpc.selectSubnets({
-          subnetGroupName: "TgwAttachment",
-        }).subnetIds,
-        transitGatewayId: tgw.attrId,
-        vpcId: inspectionVpc.vpcId,
-        tags: [
-          {
-            key: "Name",
-            value: "TGW attachment for Inspection VPC",
+    const tgwAttachmentForInspectionVpc =
+      new ec2.CfnTransitGatewayVpcAttachment(
+        this,
+        "TGW attachment for Inspection VPC",
+        {
+          subnetIds: inspectionVpc.selectSubnets({
+            subnetGroupName: "TgwAttachment",
+          }).subnetIds,
+          transitGatewayId: tgw.attrId,
+          vpcId: inspectionVpc.vpcId,
+          options: {
+            ApplianceModeSupport: "enable",
           },
-        ],
-      }
-    );
+          tags: [
+            {
+              key: "Name",
+              value: "TGW attachment for Inspection VPC",
+            },
+          ],
+        }
+      );
 
     // Transit Gateway attachment for Egress VPC
-    const tgwAttachmentForEgressVpc = new ec2.CfnTransitGatewayAttachment(
+    const tgwAttachmentForEgressVpc = new ec2.CfnTransitGatewayVpcAttachment(
       this,
       "TGW attachment for Egress VPC",
       {
@@ -254,7 +258,7 @@ export class NetworkFirewallStack extends Stack {
     );
 
     // Transit Gateway attachment for Spoke VPC A
-    const tgwAttachmentForSpokeVpcA = new ec2.CfnTransitGatewayAttachment(
+    const tgwAttachmentForSpokeVpcA = new ec2.CfnTransitGatewayVpcAttachment(
       this,
       "TGW attachment for Spoke VPC A",
       {
@@ -273,7 +277,7 @@ export class NetworkFirewallStack extends Stack {
     );
 
     // Transit Gateway attachment for Spoke VPC B
-    const tgwAttachmentForSpokeVpcB = new ec2.CfnTransitGatewayAttachment(
+    const tgwAttachmentForSpokeVpcB = new ec2.CfnTransitGatewayVpcAttachment(
       this,
       "TGW attachment for Spoke VPC B",
       {
